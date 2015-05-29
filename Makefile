@@ -8,8 +8,8 @@ test:
 
 rundeck:
 	@mkdir -p bin/
-	@go get ./... 
-	@go install rundeck.v12
+#	@go get ./... 
+	@go install ./src/rundeck.v12
 
 rundeck-bin:
 	@mkdir -p bin/
