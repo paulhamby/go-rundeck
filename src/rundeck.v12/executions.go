@@ -1,6 +1,8 @@
 package rundeck
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 type Execution struct {
 	XMLName         xml.Name          `xml:"execution"`
@@ -60,12 +62,5 @@ func (c *RundeckClient) ListExecutions(projectId string, options map[string]stri
 	options["project"] = projectId
 	var data Executions
 	err := c.Get(&data, "executions", options)
-	return data, err
-}
-
-func (c *RundeckClient) GetExecutionState(executionId string) (ExecutionState, error) {
-	u := make(map[string]string)
-	var data ExecutionState
-	err := c.Get(&data, "execution/"+executionId+"/state", u)
 	return data, err
 }
