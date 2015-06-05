@@ -12,13 +12,11 @@ type ExecutionOutput struct {
 	ExecState      string                 `xml:"execState"`
 	LastModified   ExecutionDateTime      `xml:"lastModified"`
 	ExecDuration   int64                  `xml:"execDuration"`
-	//PercentLoaded  float64                `xml:"percentLoaded"`
 	TotalSize      int64                  `xml:"totalSize"`
 	Entries        ExecutionOutputEntries `xml:"entries"`
 }
 
 type ExecutionOutputEntries struct {
-	//	XMLName      xml.Name `xml:"entries"`
 	Entry []ExecutionOutputEntry `xml:"entry"`
 }
 
@@ -32,7 +30,6 @@ type ExecutionOutputEntry struct {
 	Command      string `xml:"command,attr"`
 	Stepctx      string `xml:"stepctx,attr"`
 	Node         string `xml:"node,attr"`
-	//time='13:49:01' absolute_time='2015-05-29T13:49:01Z' log='[workflow] Begin execution: rundeck-workflow-node-first context: null' level='VERBOSE' user='admin' command='' stepctx='' node='localhost
 }
 
 func (c *RundeckClient) GetExecutionState(executionId string) (ExecutionState, error) {

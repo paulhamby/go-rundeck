@@ -1,8 +1,6 @@
 package rundeck
 
-import (
-	"encoding/xml"
-)
+import "encoding/xml"
 
 type Execution struct {
 	XMLName         xml.Name          `xml:"execution"`
