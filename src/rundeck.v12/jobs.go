@@ -242,11 +242,21 @@ func (c *RundeckClient) GetOpts(j string) (map[string]string, error) {
 	} else {
 		if data.Job.Context.Options != nil {
 			for _, option := range *data.Job.Context.Options {
-				if option.DefaultValue == "" {
-					u[option.Name] = "<no default>"
-				} else {
-					u[option.Name] = option.DefaultValue
+				var optionRequirement string
+				if option.Required {
+					optionRequirement = "* "
+				}else {
+					optionRequirement = "  "
 				}
+
+				var optionValue string
+				if option.DefaultValue == "" {
+					optionValue =  "<no default>"
+				} else {
+					optionValue = option.DefaultValue
+				}
+
+				u[optionRequirement + option.Name] =  optionValue
 			}
 		}
 		return u, nil
