@@ -8,12 +8,12 @@ import (
 )
 
 type Job struct {
-	XMLName     xml.Name `xml:"job"`
-	ID          string   `xml:"id,attr"`
-	Name        string   `xml:"name"`
-	Group       string   `xml:"group"`
-	Project     string   `xml:"project"`
-	Description string   `xml:"description,omitempty"`
+	XMLName         xml.Name `xml:"job"`
+	ID              string   `xml:"id,attr"`
+	Name            string   `xml:"name"`
+	Group           string   `xml:"group"`
+	Project         string   `xml:"project"`
+	Description     string   `xml:"description,omitempty"`
 	// These two come from Execution output
 	AverageDuration int64   `xml:"averageDuration,attr,omitempty"`
 	Options         Options `xml:"options,omitempty"`
@@ -53,7 +53,7 @@ func (ro *RunOptions) toQueryParams() (u map[string]string) {
 		if len(tokens) == 1 {
 			switch tokens[0] {
 			case "-":
-				//skip
+			//skip
 			default:
 				k := tokens[0]
 				v := reflect.ValueOf(*ro).Field(i).String()
@@ -70,7 +70,7 @@ func (ro *RunOptions) toQueryParams() (u map[string]string) {
 					q[k] = v
 				}
 			default:
-				//skip
+			//skip
 			}
 		}
 	}
@@ -94,9 +94,9 @@ type JobDetails struct {
 	MultipleExections bool            `xml:"multipleExecutions"`
 	Dispatch          JobDispatch     `xml:"dispatch"`
 	NodeFilters       struct {
-		Filter []string `xml:"filter"`
-	} `xml:"nodefilters"`
-	Sequence JobSequence `xml:"sequence"`
+						  Filter []string `xml:"filter"`
+					  } `xml:"nodefilters"`
+	Sequence          JobSequence `xml:"sequence"`
 }
 
 type JobSequence struct {
@@ -233,7 +233,25 @@ func (c *RundeckClient) GetRequiredOpts(j string) (map[string]string, error) {
 		return u, nil
 	}
 }
-
+func (c *RundeckClient) GetOpts(j string) (map[string]string, error) {
+	u := make(map[string]string)
+	var data JobList
+	err := c.Get(&data, "job/"+j, u)
+	if err != nil {
+		return u, err
+	} else {
+		if data.Job.Context.Options != nil {
+			for _, option := range *data.Job.Context.Options {
+				if option.DefaultValue == "" {
+					u[option.Name] = "<no default>"
+				} else {
+					u[option.Name] = option.DefaultValue
+				}
+			}
+		}
+		return u, nil
+	}
+}
 func (c *RundeckClient) RunJob(id string, options RunOptions) (Executions, error) {
 	u := options.toQueryParams()
 	var data Executions
